@@ -1,50 +1,238 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+const livroDestaque = {
+  titulo: "Eco dos Loucos Anos 20",
+  sinopse: "Uma história envolvente que atravessa os excessos e contradições de uma década inesquecível. [Substitui por uma sinopse de 2-3 frases.]",
+  capa: "/capas/eco-dos-loucos-anos-20.jpg",
+  link: "https://amzn.eu/d/08ESFihX",
+};
+
+const catalogo = [
+  {
+    titulo: "Rendimento Extra com Inteligência Artificial",
+    capa: "/capas/rendimento-extra-ia.jpg",
+    link: "https://amzn.eu/d/01C2IHg6",
+  },
+  {
+    titulo: "Eco dos Loucos Anos 20",
+    capa: "/capas/eco-dos-loucos-anos-20.jpg",
+    link: "https://amzn.eu/d/08ESFihX",
+  },
+];
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One Thousand Works | Editora</title>
+  </head>
+  <body>
+    <header>
+      <h1>One Thousand Works</h1>
+      <p class="tagline">Histórias que ficam.</p>
+    </header>
+
+    <section class="destaque">
+      <img src={livroDestaque.capa} alt={`Capa de ${livroDestaque.titulo}`} />
+      <div class="destaque-texto">
+        <span class="etiqueta">Lançamento em destaque</span>
+        <h2>{livroDestaque.titulo}</h2>
+        <p>{livroDestaque.sinopse}</p>
+        <a class="botao" href={livroDestaque.link} target="_blank" rel="noopener">
+          Comprar na Amazon
+        </a>
+      </div>
+    </section>
+
+    <section class="catalogo">
+      <h2>Catálogo</h2>
+      <div class="grelha">
+        {catalogo.map((livro) => (
+          <a class="livro-card" href={livro.link} target="_blank" rel="noopener">
+            <img src={livro.capa} alt={`Capa de ${livro.titulo}`} />
+            <p>{livro.titulo}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+<section class="newsletter">
+  <h2>Não percas os próximos lançamentos</h2>
+  <p>Subscreve a newsletter da One Thousand Works.</p>
+  <form id="form-newsletter">
+    <input type="email" id="input-email" name="email" placeholder="o-teu-email@exemplo.com" required />
+    <button type="submit">Subscrever</button>
+  </form>
+  <p id="mensagem-newsletter"></p>
+</section>
+
+<script>
+  const form = document.getElementById("form-newsletter") as HTMLFormElement;
+  const mensagem = document.getElementById("mensagem-newsletter") as HTMLParagraphElement;
+
+  form.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const input = document.getElementById("input-email") as HTMLInputElement;
+    const email = input.value;
+
+    mensagem.textContent = "A subscrever...";
+
+    try {
+      const resposta = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (resposta.ok) {
+        mensagem.textContent = "Obrigado! Verifica o teu email para confirmar.";
+        form.reset();
+      } else {
+        mensagem.textContent = "Algo correu mal. Tenta novamente.";
+      }
+    } catch {
+      mensagem.textContent = "Algo correu mal. Tenta novamente.";
+    }
+  });
+</script>
+
+    <footer>
+      <p>&copy; {new Date().getFullYear()} One Thousand Works</p>
+    </footer>
+  </body>
 </html>
+
+<style>
+  :global(body) {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #f7f5f3;
+    color: #2b2b2b;
+  }
+
+  header {
+    background: #f4c9bb;
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+  }
+
+  .tagline {
+    margin-top: 0.5rem;
+    font-style: italic;
+    color: #5a4f4a;
+  }
+
+  .destaque {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+    align-items: center;
+  }
+
+  .destaque img {
+    width: 220px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .destaque-texto {
+    flex: 1;
+    min-width: 250px;
+  }
+
+  .etiqueta {
+    display: inline-block;
+    background: #f4c9bb;
+    color: #5a342a;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .botao {
+    display: inline-block;
+    margin-top: 1rem;
+    background: #2b2b2b;
+    color: #fff;
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+
+  .catalogo {
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .grelha {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .livro-card {
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+  }
+
+  .livro-card img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .livro-card p {
+    margin-top: 0.5rem;
+    font-weight: 600;
+  }
+
+  .newsletter {
+    background: #ece8e5;
+    text-align: center;
+    padding: 3rem 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .newsletter form {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .newsletter input {
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    min-width: 250px;
+  }
+
+  .newsletter button {
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    background: #2b2b2b;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: #888;
+    font-size: 0.9rem;
+  }
+</style>
