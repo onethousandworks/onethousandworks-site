@@ -1,9 +1,10 @@
+
 ---
-import SEO from "../components/SEO.astro";
+import SEO from "../../components/SEO.astro";
 
 const livroDestaque = {
   titulo: "Eco dos Loucos Anos 20",
-  sinopse: "Um século depois, a história repete o mesmo guião. Em Eco dos Loucos Anos 20, Philipe Sioul revela as semelhanças assustadoras entre a década de 1920 e a de 2020: de pandemias globais e tensões geopolíticas à euforia cega nos mercados financeiros. Trocámos as novidades do rádio e do automóvel pela Inteligência Artificial e pelas aplicações de trading, mas a psicologia da ganância humana continua intacta. Mais do que um ensaio histórico e económico, este livro é um mapa de sobrevivência indispensável para antecipar o grande ajuste macroeconómico que se avizinha.",
+  sinopse: "A century later, history is repeating the same script. In Eco dos Loucos Anos 20 (Echo of the Roaring Twenties), Philipe Sioul reveals the chilling similarities between the 1920s and the 2020s: from global pandemics and geopolitical tensions to blind euphoria in the financial markets. We traded the novelty of the radio and the automobile for Artificial Intelligence and trading apps, but the psychology of human greed remains completely intact. More than a historical and economic essay, this book is an indispensable survival map to anticipate the major macroeconomic adjustment ahead.",
   capa: "/capas/eco-dos-loucos-anos-20.jpg",
   link: "https://amzn.eu/d/08ESFihX",
 };
@@ -22,56 +23,62 @@ const catalogo = [
 ];
 ---
 
-<html lang="pt">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <SEO
-      titulo="One Thousand Works | Editora"
-      descricao="Descobre os livros da One Thousand Works, incluindo 'Eco dos Loucos Anos 20' e outros títulos em português europeu."
-      lang="pt"
+      titulo="One Thousand Works | Publisher"
+      descricao="Discover One Thousand Works' books, including 'Eco dos Loucos Anos 20' and other titles in European Portuguese."
+      lang="en"
     />
   </head>
   <body>
     <header>
       <h1>One Thousand Works</h1>
-      <p class="tagline">Histórias que ficam.</p>
-      <a href="/en" class="seletor-idioma">🇬🇧 English</a>
+      <p class="tagline">Stories that stay with you.</p>
+      <a href="/" class="seletor-idioma">🇵🇹 Português</a>
     </header>
 
     <section class="destaque">
-      <img src={livroDestaque.capa} alt={`Capa de ${livroDestaque.titulo}`} />
+      <img src={livroDestaque.capa} alt={`Cover of ${livroDestaque.titulo}`} />
       <div class="destaque-texto">
-        <span class="etiqueta">Lançamento em destaque</span>
+        <span class="etiqueta">Featured release</span>
         <h2>{livroDestaque.titulo}</h2>
         <p>{livroDestaque.sinopse}</p>
         <a class="botao" href={livroDestaque.link} target="_blank" rel="noopener">
-          Comprar na Amazon
+          Buy on Amazon
         </a>
       </div>
     </section>
 
     <section class="catalogo">
-      <h2>Catálogo</h2>
+      <h2>Catalog</h2>
       <div class="grelha">
         {catalogo.map((livro) => (
           <a class="livro-card" href={livro.link} target="_blank" rel="noopener">
-            <img src={livro.capa} alt={`Capa de ${livro.titulo}`} />
+            <img src={livro.capa} alt={`Cover of ${livro.titulo}`} />
             <p>{livro.titulo}</p>
           </a>
         ))}
       </div>
     </section>
 
-<section class="newsletter">
-  <h2>Não percas os próximos lançamentos</h2>
-  <p>Subscreve a newsletter da One Thousand Works.</p>
-  <form id="form-newsletter">
-    <input type="email" id="input-email" name="email" placeholder="o-teu-email@exemplo.com" required />
-    <button type="submit">Subscrever</button>
-  </form>
-  <p id="mensagem-newsletter"></p>
-</section>
+    <section class="newsletter">
+      <h2>Don't miss our next releases</h2>
+      <p>Subscribe to the One Thousand Works newsletter.</p>
+      <form id="form-newsletter">
+        <input type="email" id="input-email" name="email" placeholder="your-email@example.com" required />
+        <button type="submit">Subscribe</button>
+      </form>
+      <p id="mensagem-newsletter"></p>
+    </section>
+
+    <footer>
+      <p>&copy; {new Date().getFullYear()} One Thousand Works</p>
+    </footer>
+  </body>
+</html>
 
 <script>
   const form = document.getElementById("form-newsletter") as HTMLFormElement;
@@ -82,7 +89,7 @@ const catalogo = [
     const input = document.getElementById("input-email") as HTMLInputElement;
     const email = input.value;
 
-    mensagem.textContent = "A subscrever...";
+    mensagem.textContent = "Subscribing...";
 
     try {
       const resposta = await fetch("/api/subscribe", {
@@ -92,22 +99,16 @@ const catalogo = [
       });
 
       if (resposta.ok) {
-        mensagem.textContent = "Obrigado! Verifica o teu email para confirmar.";
+        mensagem.textContent = "Thank you! Check your email to confirm.";
         form.reset();
       } else {
-        mensagem.textContent = "Algo correu mal. Tenta novamente.";
+        mensagem.textContent = "Something went wrong. Please try again.";
       }
     } catch {
-      mensagem.textContent = "Algo correu mal. Tenta novamente.";
+      mensagem.textContent = "Something went wrong. Please try again.";
     }
   });
 </script>
-
-    <footer>
-      <p>&copy; {new Date().getFullYear()} One Thousand Works</p>
-    </footer>
-  </body>
-</html>
 
 <style>
   :global(body) {

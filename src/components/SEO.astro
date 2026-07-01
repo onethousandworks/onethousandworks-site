@@ -1,0 +1,42 @@
+---
+interface Props {
+  titulo: string;
+  descricao: string;
+  imagem?: string;
+  lang?: "pt" | "en";
+}
+
+const {
+  titulo,
+  descricao,
+  imagem = "/og-image.jpg",
+  lang = "pt",
+} = Astro.props;
+
+const urlAtual = new URL(Astro.url.pathname, Astro.site);
+const urlImagem = new URL(imagem, Astro.site);
+---
+
+<title>{titulo}</title>
+<meta name="description" content={descricao} />
+<link rel="canonical" href={urlAtual} />
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content={titulo} />
+<meta property="og:description" content={descricao} />
+<meta property="og:image" content={urlImagem} />
+<meta property="og:url" content={urlAtual} />
+<meta property="og:locale" content={lang === "pt" ? "pt_PT" : "en_US"} />
+<meta property="og:site_name" content="One Thousand Works" />
+
+<!-- Twitter/X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={titulo} />
+<meta name="twitter:description" content={descricao} />
+<meta name="twitter:image" content={urlImagem} />
+
+<!-- Versões alternativas de idioma (ajuda o Google a saber que /  e /en são a mesma página) -->
+<link rel="alternate" hreflang="pt" href={new URL("/", Astro.site)} />
+<link rel="alternate" hreflang="en" href={new URL("/en", Astro.site)} />
+<link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />
