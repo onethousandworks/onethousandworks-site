@@ -9,10 +9,14 @@ const blog = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		description: z.string(),
-		// Transform string to Date object
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
 		heroImage: z.string().optional(),
+		// Campos específicos de review de livros
+		livro: z.string().optional(),
+		autorLivro: z.string().optional(),
+		nota: z.number().min(1).max(5).optional(),
+		linkCompra: z.string().url().optional(),
 	}),
 });
 

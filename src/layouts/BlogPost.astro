@@ -7,7 +7,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, livro, autorLivro, nota, linkCompra } = Astro.props;
 ---
 
 <html lang="en">
@@ -21,12 +21,16 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 			.hero-image {
 				width: 100%;
+				max-width: 500px;
+				margin: 0 auto;
 			}
 			.hero-image img {
 				display: block;
 				margin: 0 auto;
 				border-radius: 12px;
 				box-shadow: var(--box-shadow);
+				width: 100%;
+				height: auto;
 			}
 			.prose {
 				width: 720px;
@@ -51,6 +55,34 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			.last-updated-on {
 				font-style: italic;
 			}
+			.ficha-review {
+				background: #fff5f0;
+				border-radius: 8px;
+				padding: 1rem 1.5rem;
+				margin-bottom: 1.5rem;
+				text-align: center;
+				}
+
+				.ficha-review p {
+				margin: 0.3rem 0;
+				}
+
+				.nota {
+				color: #e6a756;
+				font-size: 1.3rem;
+				letter-spacing: 0.2rem;
+				}
+
+				.botao-compra {
+				display: inline-block;
+				margin-top: 0.8rem;
+				background: #2b2b2b;
+				color: #fff;
+				padding: 0.6rem 1.3rem;
+				border-radius: 6px;
+				text-decoration: none;
+				font-size: 0.9rem;
+			}
 		</style>
 	</head>
 
@@ -59,7 +91,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<main>
 			<article>
 				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
+					{heroImage && <img src={heroImage} alt="" />}
 				</div>
 				<div class="prose">
 					<div class="title">
@@ -75,6 +107,22 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						</div>
 						<h1>{title}</h1>
 						<hr />
+
+						{autorLivro && (
+						<div class="ficha-review">
+							<p><strong>Livro:</strong> {livro} {autorLivro && <span>— {autorLivro}</span>}</p>
+							{nota && (
+							<p class="nota">
+								{"★".repeat(nota)}{"☆".repeat(5 - nota)}
+							</p>
+							)}
+							{linkCompra && (
+							<a class="botao-compra" href={linkCompra} target="_blank" rel="noopener">
+								Comprar na Amazon
+							</a>
+							)}
+						</div>
+						)}
 					</div>
 					<slot />
 				</div>

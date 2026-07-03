@@ -36,7 +36,10 @@ const catalogo = [
     <header>
       <img src="/logo.svg" alt="One Thousand Works" class="logo" />
       <p class="tagline">Descobre livros que ajudam a entender o futuro</p>
-      <a href="/en" class="seletor-idioma">🇬🇧 English</a>
+      <nav class="nav-header">
+        <a href="/blog">Reviews</a>
+        <a href="/en" class="seletor-idioma">🇬🇧 English</a>
+      </nav>
     </header>
 
     <section class="destaque">
@@ -241,5 +244,21 @@ const catalogo = [
     padding: 2rem;
     color: #888;
     font-size: 0.9rem;
+  }
+  .nav-header {
+    margin-top: 0.8rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .nav-header a {
+    color: #2b2b2b;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .nav-header a:hover {
+    text-decoration: underline;
   }
 </style>
