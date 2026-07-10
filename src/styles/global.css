@@ -1,155 +1,332 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
-}
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-regular.woff") format("woff");
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-bold.woff") format("woff");
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-body {
-	font-family: "Atkinson", sans-serif;
-	margin: 0;
-	padding: 0;
-	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
-}
-main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
-	line-height: 1.2;
-}
-h1 {
-	font-size: 3.052em;
-}
-h2 {
-	font-size: 2.441em;
-}
-h3 {
-	font-size: 1.953em;
-}
-h4 {
-	font-size: 1.563em;
-}
-h5 {
-	font-size: 1.25em;
-}
-strong,
-b {
-	font-weight: 700;
-}
-a {
-	color: var(--accent);
-}
-a:hover {
-	color: var(--accent);
-}
-p {
-	margin-bottom: 1em;
-}
-.prose p {
-	margin-bottom: 2em;
-}
-textarea {
-	width: 100%;
-	font-size: 16px;
-}
-input {
-	font-size: 16px;
-}
-table {
-	width: 100%;
-}
-img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
-}
-code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
-}
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
-}
-pre > code {
-	all: unset;
-}
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
-}
-hr {
-	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
-}
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
-	}
+  /* Color Palette - Amazon KDP Light Editorial */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #f3f3f3;
+  --bg-dark: #232f3e; /* Squid Ink */
+  --bg-dark-alt: #19222d;
+  
+  --accent: #e47911; /* Amazon Orange */
+  --accent-light: #ff9900;
+  --accent-button: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+  --accent-button-hover: linear-gradient(to bottom, #f5d78e, #eeb933);
+  --accent-button-border: #a88734;
+  
+  --text-primary: #111111; /* Off-black */
+  --text-secondary: #333333; /* Dark gray */
+  --text-muted: #565959; /* Slate gray */
+  --text-light: #ffffff;
+  
+  --border-color: #e7e7e7;
+  --border-hover: #b5b5b5;
+  --border-glow: rgba(228, 121, 17, 0.25);
+
+  /* Fonts */
+  --fonte-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --fonte-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* Spacing & Borders */
+  --raio-borda: 12px;
+  --raio-borda-sm: 6px;
+  --raio-borda-lg: 18px;
+  
+  /* Shadows & Glows */
+  --sombra-suave: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --sombra-card: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 0 10px rgba(228, 121, 17, 0.2);
+  
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
+/* Base resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-secondary);
+}
+
+body {
+  font-family: var(--fonte-base);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Typography elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fonte-display);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: #007185; /* Amazon Link Teal */
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: #c45500; /* Amazon Link Hover Orange */
+  text-decoration: underline;
+}
+
+/* Modern Card Layout */
+.glass-panel {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--sombra-suave);
+  border-radius: var(--raio-borda);
+  transition: all var(--transition-normal);
+}
+
+.glass-panel:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--sombra-card);
+}
+
+/* Site Navigation (Global fallback style) */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-dark);
+  border-bottom: 4px solid var(--accent);
+  transition: all var(--transition-fast);
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+header .logo {
+  height: 38px;
+  width: auto;
+  filter: invert(1) brightness(2.5);
+  transition: transform var(--transition-fast);
+}
+
+header .logo:hover {
+  transform: scale(1.02);
+}
+
+header .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+header .nav-links a {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #dddddd;
+  position: relative;
+  padding: 0.25rem 0;
+  text-decoration: none;
+}
+
+header .nav-links a:hover,
+header .nav-links a.active {
+  color: var(--text-light);
+}
+
+/* Interactive elements */
+.botao, .botao-compra {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-button);
+  color: var(--text-primary) !important;
+  font-weight: 500;
+  font-family: var(--fonte-base);
+  padding: 0.7rem 1.8rem;
+  border-radius: var(--raio-borda-sm);
+  font-size: 0.92rem;
+  border: 1px solid var(--accent-button-border);
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 1px 3px rgba(0,0,0,0.1);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  text-decoration: none !important;
+}
+
+.botao:hover, .botao-compra:hover {
+  background: var(--accent-button-hover);
+  border-color: #846a29;
+  text-decoration: none !important;
+}
+
+.botao:active, .botao-compra:active {
+  background: #f0c14b;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2) inset;
+}
+
+/* Book Card */
+.livro-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--transition-normal);
+}
+
+.livro-card img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: var(--raio-borda-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  margin-bottom: 1rem;
+  transition: all var(--transition-normal);
+}
+
+.livro-card p,
+.livro-card .title {
+  font-family: var(--fonte-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-primary);
+  margin-top: 0.5rem;
+  transition: color var(--transition-fast);
+}
+
+.livro-card:hover {
+  transform: translateY(-4px);
+  text-decoration: none;
+}
+
+.livro-card:hover img {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  border-color: var(--accent);
+}
+
+.livro-card:hover p,
+.livro-card:hover .title {
+  color: #c45500;
+}
+
+/* Glowing tag badge */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  background: #fdf5ea;
+  color: #c45500;
+  border: 1px solid #fad136;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--raio-borda-sm);
+  font-family: var(--fonte-base);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 1rem;
+}
+
+/* Review details block */
+.ficha-review {
+  background: #fdfaf7;
+  border: 1px solid #faebcc;
+  border-left: 4px solid var(--accent);
+  border-radius: var(--raio-borda-sm);
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  text-align: left;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.ficha-review p {
+  margin: 0.5rem 0;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+}
+
+.ficha-review p strong {
+  color: var(--text-primary);
+}
+
+.nota {
+  color: #f2a71e;
+  font-size: 1.4rem;
+  letter-spacing: 0.2rem;
+  margin-top: 0.5rem;
+}
+
+/* Main content wrapper */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+/* Global Footer */
+footer {
+  background: var(--bg-dark-alt);
+  border-top: 5px solid var(--accent);
+  padding: 3.5rem 2rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+footer p {
+  color: #a6a6a6;
+  font-size: 0.9rem;
+}
+
+footer .social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+footer .social-links a {
+  color: #a6a6a6;
+  transition: all var(--transition-fast);
+}
+
+footer .social-links a:hover {
+  color: var(--accent-light);
+  transform: translateY(-2px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 5px;
+  border: 2px solid var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a6a6a6;
 }

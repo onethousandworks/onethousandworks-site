@@ -1,5 +1,8 @@
 ---
 import SEO from "../components/SEO.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
 
 const livroDestaque = {
   titulo: "Eco dos Loucos Anos 20",
@@ -33,232 +36,357 @@ const catalogo = [
     />
   </head>
   <body>
-    <header>
-      <img src="/logo.svg" alt="One Thousand Works" class="logo" />
-      <p class="tagline">Descobre livros que ajudam a entender o futuro</p>
-      <nav class="nav-header">
-        <a href="/blog">Reviews</a>
-        <a href="/en" class="seletor-idioma">🇬🇧 English</a>
-      </nav>
-    </header>
-
-    <section class="destaque">
-      <img src={livroDestaque.capa} alt={`Capa de ${livroDestaque.titulo}`} />
-      <div class="destaque-texto">
-        <span class="etiqueta">Lançamento em destaque</span>
-        <h2>{livroDestaque.titulo}</h2>
-        <p>{livroDestaque.sinopse}</p>
-        <a class="botao" href={livroDestaque.link} target="_blank" rel="noopener">
-          Comprar na Amazon
-        </a>
-      </div>
-    </section>
-
-    <section class="catalogo">
-      <h2>Catálogo</h2>
-      <div class="grelha">
-        {catalogo.map((livro) => (
-          <a class="livro-card" href={livro.link} target="_blank" rel="noopener">
-            <img src={livro.capa} alt={`Capa de ${livro.titulo}`} />
-            <p>{livro.titulo}</p>
+    <Header />
+    
+    <main>
+      <!-- Hero / Feature Section -->
+      <section class="destaque glass-panel">
+        <div class="destaque-imagem-wrapper">
+          <img src={livroDestaque.capa} alt={`Capa de ${livroDestaque.titulo}`} class="destaque-capa" />
+          <div class="destaque-capa-shadow"></div>
+        </div>
+        <div class="destaque-texto">
+          <span class="etiqueta">Lançamento em destaque</span>
+          <h2>{livroDestaque.titulo}</h2>
+          <p class="sinopse">{livroDestaque.sinopse}</p>
+          <a class="botao" href={livroDestaque.link} target="_blank" rel="noopener">
+            Comprar na Amazon
+            <svg class="icon-external" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
           </a>
-        ))}
-      </div>
-    </section>
+        </div>
+      </section>
 
-<section class="newsletter">
-  <h2>Não percas os próximos lançamentos</h2>
-  <p>Subscreve a newsletter da One Thousand Works.</p>
-  <form id="form-newsletter">
-    <input type="email" id="input-email" name="email" placeholder="o-teu-email@exemplo.com" required />
-    <button type="submit">Subscrever</button>
-  </form>
-  <p id="mensagem-newsletter"></p>
-</section>
+      <!-- Catalog Section -->
+      <section class="catalogo">
+        <div class="seccao-titulo">
+          <h2>Catálogo</h2>
+          <div class="divisor-linha"></div>
+        </div>
+        <div class="grelha">
+          {catalogo.map((livro) => (
+            <a class="livro-card-container glass-panel" href={livro.link} target="_blank" rel="noopener">
+              <div class="livro-card">
+                <div class="livro-capa-wrapper">
+                  <img src={livro.capa} alt={`Capa de ${livro.titulo}`} />
+                </div>
+                <p class="livro-titulo">{livro.titulo}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
 
-<script>
-  const form = document.getElementById("form-newsletter") as HTMLFormElement;
-  const mensagem = document.getElementById("mensagem-newsletter") as HTMLParagraphElement;
+      <!-- Newsletter Section -->
+      <section class="newsletter glass-panel">
+        <div class="newsletter-icon">
+          <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        </div>
+        <h2>Não percas os próximos lançamentos</h2>
+        <p>Subscreve a newsletter da One Thousand Works para receberes novidades em primeira mão.</p>
+        
+        <form id="form-newsletter">
+          <input type="email" id="input-email" name="email" placeholder="o-teu-email@exemplo.com" required />
+          <button type="submit">
+            Subscrever
+          </button>
+        </form>
+        <p id="mensagem-newsletter"></p>
+      </section>
+    </main>
 
-  form.addEventListener("submit", async (evento) => {
-    evento.preventDefault();
-    const input = document.getElementById("input-email") as HTMLInputElement;
-    const email = input.value;
+    <Footer />
 
-    mensagem.textContent = "A subscrever...";
+    <script>
+      const form = document.getElementById("form-newsletter") as HTMLFormElement;
+      const mensagem = document.getElementById("mensagem-newsletter") as HTMLParagraphElement;
 
-    try {
-      const resposta = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+      form.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        const input = document.getElementById("input-email") as HTMLInputElement;
+        const email = input.value;
+
+        mensagem.className = "status-loading";
+        mensagem.textContent = "A subscrever...";
+
+        try {
+          const resposta = await fetch("/api/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+
+          if (resposta.ok) {
+            mensagem.className = "status-success";
+            mensagem.textContent = "Obrigado! Verifica o teu email para confirmar.";
+            form.reset();
+          } else {
+            mensagem.className = "status-error";
+            mensagem.textContent = "Algo correu mal. Tenta novamente.";
+          }
+        } catch {
+          mensagem.className = "status-error";
+          mensagem.textContent = "Algo correu mal. Tenta novamente.";
+        }
       });
-
-      if (resposta.ok) {
-        mensagem.textContent = "Obrigado! Verifica o teu email para confirmar.";
-        form.reset();
-      } else {
-        mensagem.textContent = "Algo correu mal. Tenta novamente.";
-      }
-    } catch {
-      mensagem.textContent = "Algo correu mal. Tenta novamente.";
-    }
-  });
-</script>
-
-    <footer>
-      <p>&copy; {new Date().getFullYear()} One Thousand Works</p>
-    </footer>
+    </script>
   </body>
 </html>
 
 <style>
-  :global(body) {
-    margin: 0;
-    font-family: system-ui, sans-serif;
-    background: #f7f5f3;
-    color: #2b2b2b;
-  }
-
-  header {
-    background: #fff5f0;
-    padding: 1rem 1.5rem;
-    text-align: center;
-  }
-
-  .logo {
-    max-width: 140px;
-    height: auto;
-  }
-
-  .tagline {
-    margin-top: 0.5rem;
-    font-style: italic;
-    color: #5a4f4a;
-  }
-
   .destaque {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
-    max-width: 900px;
-    margin: 3rem auto;
-    padding: 0 1.5rem;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 1rem auto 3rem auto;
+    padding: 3rem;
     align-items: center;
+    position: relative;
+    background: var(--bg-primary);
   }
 
-  .destaque img {
-    width: 220px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  .destaque-imagem-wrapper {
+    position: relative;
+    width: 210px;
+    flex-shrink: 0;
+    perspective: 1000px;
+    margin: 0 auto;
+  }
+
+  .destaque-capa {
+    width: 100%;
+    border-radius: var(--raio-borda-sm);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
+    transform: rotateY(-3deg);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  }
+
+  .destaque-imagem-wrapper:hover .destaque-capa {
+    transform: rotateY(3deg) translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   }
 
   .destaque-texto {
     flex: 1;
-    min-width: 250px;
+    min-width: 320px;
   }
 
-  .etiqueta {
-    display: inline-block;
-    background: #f4c9bb;
-    color: #5a342a;
-    padding: 0.25rem 0.75rem;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    margin-bottom: 0.5rem;
+  .destaque-texto h2 {
+    font-size: 2rem;
+    margin-bottom: 1.2rem;
+    color: var(--text-primary);
   }
 
-  .botao {
-    display: inline-block;
-    margin-top: 1rem;
-    background: #2b2b2b;
-    color: #fff;
-    padding: 0.7rem 1.5rem;
-    border-radius: 6px;
-    text-decoration: none;
+  .sinopse {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2rem;
   }
 
+  .icon-external {
+    margin-left: 0.5rem;
+    transition: transform 0.2s ease;
+  }
+
+  .botao:hover .icon-external {
+    transform: translate(2px, -2px);
+  }
+
+  /* Catalog */
   .catalogo {
-    max-width: 900px;
-    margin: 3rem auto;
-    padding: 0 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .seccao-titulo {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .seccao-titulo h2 {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  .divisor-linha {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-color), transparent);
+    flex: 1;
   }
 
   .grelha {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
   }
 
-  .livro-card {
+  .livro-card-container {
+    padding: 1.5rem;
     text-decoration: none;
     color: inherit;
-    text-align: center;
+    border-radius: var(--raio-borda);
+    background: var(--bg-primary);
   }
 
-  .livro-card img {
+  .livro-card-container:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-hover);
+  }
+
+  .livro-capa-wrapper {
+    overflow: hidden;
+    border-radius: var(--raio-borda-sm);
+    margin-bottom: 1rem;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border-color);
+    aspect-ratio: 2 / 3;
+  }
+
+  .livro-capa-wrapper img {
     width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
   }
 
-  .livro-card p {
-    margin-top: 0.5rem;
+  .livro-card-container:hover .livro-capa-wrapper img {
+    transform: scale(1.02);
+  }
+
+  .livro-titulo {
+    font-family: var(--fonte-display);
     font-weight: 600;
+    font-size: 1.05rem;
+    text-align: center;
+    color: var(--text-primary);
+    margin-top: 0.5rem;
+    transition: color 0.2s ease;
   }
 
+  .livro-card-container:hover .livro-titulo {
+    color: #c45500;
+  }
+
+  /* Newsletter */
   .newsletter {
-    background: #ece8e5;
+    max-width: 800px;
+    margin: 4rem auto 2rem auto;
     text-align: center;
-    padding: 3rem 1.5rem;
-    margin-top: 3rem;
+    padding: 3.5rem 2rem;
+    position: relative;
+    background: #fdfaf7; /* Soft sand yellow/cream, like KDP callouts */
+    border: 1px solid #fad136;
+  }
+
+  .newsletter-icon {
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: inline-flex;
+    opacity: 0.9;
+  }
+
+  .newsletter h2 {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-primary);
+  }
+
+  .newsletter p {
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto 2rem auto;
   }
 
   .newsletter form {
-    margin-top: 1.5rem;
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
+    max-width: 500px;
+    margin: 0 auto;
   }
 
   .newsletter input {
-    padding: 0.7rem 1rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    flex: 1;
     min-width: 250px;
+    background: var(--bg-primary);
+    border: 1px solid #a6a6a6;
+    color: var(--text-primary);
+    padding: 0.7rem 1.2rem;
+    border-radius: var(--raio-borda-sm);
+    font-family: var(--fonte-base);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+  }
+
+  .newsletter input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: var(--shadow-glow);
   }
 
   .newsletter button {
-    padding: 0.7rem 1.5rem;
-    border-radius: 6px;
-    border: none;
-    background: #2b2b2b;
-    color: #fff;
+    background: var(--accent-button);
+    color: var(--text-primary);
+    font-weight: 500;
+    font-family: var(--fonte-base);
+    padding: 0.7rem 1.8rem;
+    border-radius: var(--raio-borda-sm);
+    font-size: 0.95rem;
+    border: 1px solid var(--accent-button-border);
     cursor: pointer;
+    box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 1px 3px rgba(0,0,0,0.1);
+    transition: background-color var(--transition-fast);
   }
 
-  footer {
-    text-align: center;
-    padding: 2rem;
-    color: #888;
+  .newsletter button:hover {
+    background: var(--accent-button-hover);
+    border-color: #846a29;
+  }
+
+  /* Subscription feedback message styling */
+  #mensagem-newsletter {
+    margin-top: 1.2rem;
     font-size: 0.9rem;
-  }
-  .nav-header {
-    margin-top: 0.8rem;
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
   }
 
-  .nav-header a {
-    color: #2b2b2b;
-    text-decoration: none;
-    font-weight: 600;
+  .status-loading {
+    color: var(--accent) !important;
   }
 
-  .nav-header a:hover {
-    text-decoration: underline;
+  .status-success {
+    color: #117a55 !important;
+    text-shadow: 0 0 1px rgba(17, 122, 85, 0.1);
+  }
+
+  .status-error {
+    color: #c45500 !important;
+  }
+
+  @media (max-width: 768px) {
+    .destaque {
+      padding: 2rem;
+      gap: 2rem;
+    }
+    .destaque-texto {
+      min-width: 100%;
+    }
+    .destaque-texto h2 {
+      font-size: 1.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .newsletter form {
+      flex-direction: column;
+    }
+    .newsletter input {
+      width: 100%;
+    }
   }
 </style>

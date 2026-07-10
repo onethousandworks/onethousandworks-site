@@ -5,87 +5,58 @@ import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
+import "../../styles/global.css";
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const currentPath = Astro.url.pathname;
+const isEnglish = currentPath.startsWith('/en') || currentPath.includes('/en/');
+
+const pageTitle = isEnglish ? "Reviews & Articles" : "Críticas e Artigos";
+const pageDesc = isEnglish 
+  ? "Our in-depth analysis and reflections on future-focused literature." 
+  : "As nossas análises detalhadas e reflexões sobre literatura focada no futuro.";
+const readMoreText = isEnglish ? "Read Review" : "Ler Crítica";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={isEnglish ? "en" : "pt"}>
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-		main {
-			width: 100%;
-			max-width: 1100px;
-		}
-		ul {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 1.5rem;
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
-		}
-		ul li * {
-			text-decoration: none;
-			transition: 0.2s ease;
-		}
-		ul li img {
-			width: 100%;
-			aspect-ratio: 2 / 3;
-			object-fit: cover;
-			margin-bottom: 0.5rem;
-			border-radius: 12px;
-		}
-		ul li a {
-			display: block;
-		}
-		.title {
-			margin: 0;
-			color: rgb(var(--black));
-			line-height: 1.2;
-			font-size: 1.1rem;
-		}
-		.date {
-			margin: 0;
-			color: rgb(var(--gray));
-			font-size: 0.9rem;
-		}
-		ul li a:hover .title,
-		ul li a:hover .date {
-			color: rgb(var(--accent));
-		}
-		ul a:hover img {
-			box-shadow: var(--box-shadow);
-		}
-		@media (max-width: 900px) {
-			ul {
-			grid-template-columns: repeat(2, 1fr);
-			}
-		}
-		@media (max-width: 560px) {
-			ul {
-			grid-template-columns: 1fr;
-			}
-		}
-		</style>
+		<BaseHead title={`${pageTitle} | One Thousand Works`} description={pageDesc} />
 	</head>
 	<body>
 		<Header />
+		
 		<main>
-			<section>
-				<ul>
+			<section class="blog-hero">
+				<h1>{pageTitle}</h1>
+				<p>{pageDesc}</p>
+				<div class="line-decorator"></div>
+			</section>
+
+			<section class="blog-content">
+				<ul class="posts-grid">
 					{
 						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									<img width={720} height={360} src={post.data.heroImage} alt="" />
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
+							<li class="post-card glass-panel">
+								<a href={`/blog/${post.id}/`} class="card-link">
+									<div class="thumbnail-wrapper">
+										<img width={720} height={360} src={post.data.heroImage} alt={`Capa de ${post.data.livro || post.data.title}`} class="thumbnail" />
+									</div>
+									<div class="card-body">
+										<span class="date-badge">
+											<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+											<FormattedDate date={post.data.pubDate} />
+										</span>
+										<h2 class="title">{post.data.title}</h2>
+										{post.data.description && <p class="description">{post.data.description}</p>}
+										<div class="read-more">
+											<span>{readMoreText}</span>
+											<svg class="arrow" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+										</div>
+									</div>
 								</a>
 							</li>
 						))
@@ -93,6 +64,176 @@ const posts = (await getCollection('blog')).sort(
 				</ul>
 			</section>
 		</main>
+		
 		<Footer />
 	</body>
 </html>
+
+<style>
+	main {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 3rem 1.5rem;
+	}
+
+	.blog-hero {
+		text-align: center;
+		margin-bottom: 3.5rem;
+	}
+
+	.blog-hero h1 {
+		font-size: 2.5rem;
+		margin-bottom: 0.75rem;
+		color: var(--text-primary);
+	}
+
+	.blog-hero p {
+		color: var(--text-muted);
+		font-size: 1.1rem;
+		max-width: 600px;
+		margin: 0 auto 1.5rem auto;
+	}
+
+	.line-decorator {
+		width: 50px;
+		height: 3px;
+		background: var(--accent);
+		margin: 0 auto;
+		border-radius: 99px;
+	}
+
+	.posts-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+		gap: 2.5rem;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.post-card {
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background: var(--bg-primary);
+		border: 1px solid var(--border-color);
+		border-radius: var(--raio-borda);
+		transition: all var(--transition-normal);
+	}
+
+	.post-card:hover {
+		transform: translateY(-4px);
+		border-color: var(--accent);
+		box-shadow: var(--sombra-card);
+	}
+
+	.card-link {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.card-link:hover {
+		text-decoration: none;
+	}
+
+	.thumbnail-wrapper {
+		width: 100%;
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		border-bottom: 1px solid var(--border-color);
+	}
+
+	.thumbnail {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform var(--transition-normal);
+	}
+
+	.post-card:hover .thumbnail {
+		transform: scale(1.02);
+	}
+
+	.card-body {
+		padding: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+	}
+
+	.date-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--text-muted);
+		font-size: 0.85rem;
+		font-weight: 500;
+		margin-bottom: 0.8rem;
+	}
+
+	.date-badge svg {
+		opacity: 0.7;
+	}
+
+	.title {
+		font-family: var(--fonte-display);
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--text-primary);
+		line-height: 1.35;
+		margin-bottom: 0.8rem;
+		transition: color var(--transition-fast);
+	}
+
+	.post-card:hover .title {
+		color: #c45500;
+	}
+
+	.description {
+		color: var(--text-secondary);
+		font-size: 0.95rem;
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.read-more {
+		margin-top: auto;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: var(--fonte-base);
+		font-weight: 700;
+		font-size: 0.9rem;
+		color: #007185; /* Amazon Link Teal */
+		transition: color var(--transition-fast);
+	}
+
+	.post-card:hover .read-more {
+		color: #c45500; /* Amazon Link Hover Orange */
+	}
+
+	.arrow {
+		transition: transform var(--transition-fast);
+	}
+
+	.post-card:hover .read-more .arrow {
+		transform: translateX(4px);
+	}
+
+	@media (max-width: 640px) {
+		.posts-grid {
+			grid-template-columns: 1fr;
+		}
+		.blog-hero h1 {
+			font-size: 2.1rem;
+		}
+	}
+</style>
